@@ -40,7 +40,7 @@ class DenseASPP(Network):
                               'MobileNetV1',
                               'MobileNetV2',
                               'Xception-DeepLab']
-        super(DenseASPP, self).__init__(num_classes, version, base_model, dilation, **kwargs)
+        super(DenseASPP, self).__init__(num_classes, version, base_model, dilation, **kwargs)  #instantiate the mother class
 
     def __call__(self, inputs=None, input_size=None, **kwargs):
         assert inputs is not None or input_size is not None
@@ -51,6 +51,10 @@ class DenseASPP(Network):
         return self._denseaspp(inputs)
 
     def _dilated_conv_block(self, inputs, filters, kernel_size=3, rate=1):
+        '''
+        rate = 1 means its a normal convolution 
+        if rate is k, then the skip is  k-1 pixels
+        '''
         x = layers.BatchNormalization()(inputs)
         x = layers.ReLU()(x)
         x = layers.Conv2D(filters, kernel_size,
